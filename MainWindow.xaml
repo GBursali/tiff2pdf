@@ -1,0 +1,67 @@
+﻿<mah:MetroWindow x:Class="Tiff2Pdf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:props="clr-namespace:Tiff2Pdf.Properties"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Tiff2Pdf"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        mc:Ignorable="d"
+        ShowInTaskbar="True"
+        ShowTitleBar="True"
+        ShowIconOnTitleBar="True"
+        Title="Tiff2Pdf" Height="350" Width="525" Visibility="{Binding state,Mode=TwoWay,Converter={StaticResource BooleanToVisibilityConverter}}">
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands>
+            <Button Content="." ToolTip="Iconize" Click="Iconize"/>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
+    <mah:MetroAnimatedSingleRowTabControl>
+        <mah:MetroTabItem Header="tiff->pdf Convert">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <ListBox Name="lbConverter" AllowDrop="True" Drop="AddFile" ItemTemplate="{StaticResource FileListBox}" ItemsSource="{Binding lbBinder,UpdateSourceTrigger=PropertyChanged}">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Delete from list" Tag="False" Click="Erase"/>
+                            <MenuItem Header="Delete from list and the file" Tag="True" Click="Erase"/>
+                            <MenuItem Header="Open file" Click="Follow"/>
+                            <Separator/>
+                            <MenuItem Header="Add a new file" Click="NewFile"/>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="Add File..." Click="NewFile" />
+                    <TextBlock HorizontalAlignment="Stretch" Grid.Column="1" Text="{Binding middleText,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="Convert..." Click="ConvertList" Grid.Column="2"/>
+                </Grid>
+            </Grid>
+        </mah:MetroTabItem>
+        <mah:MetroTabItem Header="Settings">
+            <StackPanel Name="Checkboxes" HorizontalAlignment="Center">
+                <CheckBox Checked="SettingsChanged" Unchecked="SettingsChanged" IsChecked="{Binding Source={x:Static props:Settings.Default},Path=Delete}">
+                    <TextBlock Text="Delete the Tiff file after Convert"/>
+                </CheckBox>
+                <CheckBox Checked="SettingsChanged" Unchecked="SettingsChanged" IsChecked="{Binding Source={x:Static props:Settings.Default},Path=useSamePath}">
+                    <TextBlock Text="Use the Same Path"/>
+                </CheckBox>
+                <CheckBox Checked="SettingsChanged" Unchecked="SettingsChanged" IsChecked="{Binding Source={x:Static props:Settings.Default},Path=useButton}">
+                    <TextBlock Text="Use Convert Button?(Otherwise convert immediately.)"/>
+                </CheckBox>
+                <CheckBox Checked="SettingsChanged" Unchecked="SettingsChanged" IsChecked="{Binding Source={x:Static props:Settings.Default},Path=openAfterCon}">
+                    <TextBlock Text="Open the Files after Conversion?"/>
+                </CheckBox>
+            </StackPanel>
+        </mah:MetroTabItem>
+    </mah:MetroAnimatedSingleRowTabControl>
+</mah:MetroWindow>
